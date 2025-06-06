@@ -47,18 +47,18 @@ async def on_message(message):
     except ValueError:
         cmd = message.content[len(COMMAND_PREFIX):]
         args = ''
-    authLevel = 0
+    auth_level = 0
     if message.author.bot:
-        authLevel = BOT_LEVEL
+        auth_level = BOT_LEVEL
     else:
         if isinstance(message.author, discord.Member):
             for role in message.author.roles:
                 if role.name == USER_ROLE:
-                    authLevel += 1
+                    auth_level += 1
                 elif role.name == MOD_ROLE:
-                    authLevel += 2
+                    auth_level += 2
                 elif role.name == ADMIN_ROLE:
-                    authLevel += 4
+                    auth_level += 4
 
     if cmd == 'help':
         if Help:
@@ -70,7 +70,7 @@ async def on_message(message):
         await message.channel.send('Hello! I\'m the Minecraft RCON bot!')
         print(f'Said hi to {message.author}.')
     elif cmd == 'admin':
-        if authLevel >= 4:
+        if auth_level >= 4:
             # 'admin' コマンドの場合、argsが実際のコマンドになる
             actual_cmd = args
             actual_args = ''  # adminコマンドの引数は通常ここで分離しない
@@ -80,17 +80,17 @@ async def on_message(message):
         else:
             await message.channel.send('Sorry, you need the ' + (ADMIN_ROLE or "Admin") + ' role to use that command.')
     elif cmd in cmds['user_commands']:
-        if authLevel >= 1:
+        if auth_level >= 1:
             await send_rcon(cmd, args, message)
         else:
             await message.channel.send('Sorry, you need the ' + (USER_ROLE or "User") + ' role to use that command.')
     elif cmd in cmds['mod_commands']:
-        if authLevel >= 2:
+        if auth_level >= 2:
             await send_rcon(cmd, args, message)
         else:
             await message.channel.send('Sorry, you need the ' + (MOD_ROLE or "Mod") + ' role to use that command.')
     elif cmd in cmds['admin_commands']:
-        if authLevel >= 4:
+        if auth_level >= 4:
             await send_rcon(cmd, args, message)
         else:
             await message.channel.send('Sorry, you need the ' + (ADMIN_ROLE or "Admin") + ' role to use that command.')
