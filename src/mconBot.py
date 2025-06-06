@@ -124,7 +124,6 @@ if __name__ == "__main__":
     with open('commands.json') as cmd_file:
         cmds = load(cmd_file)
 
-    global Help
     Help = discord.Embed(title="mconBot Help",
                          description="A bot to interact with your Minecraft server - from Discord!")
     Help.add_field(name='\u200b',
