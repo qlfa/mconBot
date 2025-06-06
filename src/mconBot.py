@@ -37,15 +37,15 @@ async def send_rcon(cmd, args, message):
         await message.channel.send(resp)
         print(f'{resp}')
 
-
+COMMAND_PREFIX = '/send '
 @client.event
 async def on_message(message):
-    if not message.content.startswith('/') or message.author == client.user:
+    if not message.content.startswith(COMMAND_PREFIX) or message.author == client.user:
         return
     try:
-        cmd, args = message.content[+1:].split(None, 1)
+        cmd, args = message.content[len(COMMAND_PREFIX):].split(None, 1)
     except ValueError:
-        cmd = message.content[+1:]
+        cmd = message.content[len(COMMAND_PREFIX):]
         args = ''
     authLevel = 0
     if message.author.bot:
@@ -125,7 +125,7 @@ if __name__ == "__main__":
         cmds = load(cmd_file)
 
     Help = discord.Embed(title="mconBot Help",
-                         description="A bot to interact with your Minecraft server - from Discord!")
+                         description=f"A bot to interact with your Minecraft server - from Discord!\nCommands should be prefixed with `{COMMAND_PREFIX}` (e.g., `{COMMAND_PREFIX}list`).")
     # User Commands
     user_cmds_text = ""
     for com, desc in cmds['user_commands'].items():
