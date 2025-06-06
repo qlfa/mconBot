@@ -40,7 +40,7 @@ async def send_rcon(cmd, args, message):
 
 @client.event
 async def on_message(message):
-    if not message.content.startswith('>') or message.author == client.user:
+    if not message.content.startswith('/') or message.author == client.user:
         return
     try:
         cmd, args = message.content[+1:].split(None, 1)
