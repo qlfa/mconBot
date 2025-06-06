@@ -126,22 +126,34 @@ if __name__ == "__main__":
 
     Help = discord.Embed(title="mconBot Help",
                          description="A bot to interact with your Minecraft server - from Discord!")
-    Help.add_field(name='\u200b',
-                   value='-------------------------' + (USER_ROLE or "User") + ' Commands-------------------------',
-                   inline=False)
-    for com in cmds['user_commands']: Help.add_field(name=com, value=cmds['user_commands'][com], inline=False)
+    # User Commands
+    user_cmds_text = ""
+    for com, desc in cmds['user_commands'].items():
+        user_cmds_text += f"**{com}**: {desc}\n"
+    if user_cmds_text:  # コマンドが一つでもあればフィールドを追加
+        Help.add_field(name='-------------------------' + (USER_ROLE or "User") + ' Commands-------------------------',
+                       value=user_cmds_text.strip(), inline=False)
 
-    Help.add_field(name='\u200b',
-                   value='-------------------------' + (MOD_ROLE or "Moderator") + ' Commands-------------------------',
-                   inline=False)
-    for com in cmds['mod_commands']:
-        Help.add_field(name=com, value=cmds['mod_commands'][com], inline=False)
+    # Mod Commands
+    mod_cmds_text = ""
+    for com, desc in cmds['mod_commands'].items():
+        mod_cmds_text += f"**{com}**: {desc}\n"
+    if mod_cmds_text:
+        Help.add_field(
+            name='-------------------------' + (MOD_ROLE or "Moderator") + ' Commands-------------------------',
+            value=mod_cmds_text.strip(), inline=False)
 
-    Help.add_field(name='\u200b', value='-------------------------' + (
-            ADMIN_ROLE or "Administrator") + ' Commands-------------------------', inline=False)
-    for com in cmds['admin_commands']:
-        Help.add_field(name=com, value=cmds['admin_commands'][com], inline=False)
-    Help.add_field(name='admin <custom_command>', value='Runs a custom command (requires Administrator role)',
+    # Admin Commands
+    admin_cmds_text = ""
+    for com, desc in cmds['admin_commands'].items():
+        admin_cmds_text += f"**{com}**: {desc}\n"
+    if admin_cmds_text:
+        Help.add_field(
+            name='-------------------------' + (ADMIN_ROLE or "Administrator") + ' Commands-------------------------',
+            value=admin_cmds_text.strip(), inline=False)
+
+    Help.add_field(name='Custom Admin Command',
+                   value='**admin <custom_command>**: Runs any command as admin (requires Administrator role)',
                    inline=False)
 
     if TOKEN is None:
@@ -150,6 +162,7 @@ if __name__ == "__main__":
         try:
             client.run(TOKEN)
         except discord.PrivilegedIntentsRequired as e:
-            print(f"エラー: Botに必要なインテントが有効になっていません。Discord Developer Portalで設定を確認してください: {e}")
+            print(
+                f"エラー: Botに必要なインテントが有効になっていません。Discord Developer Portalで設定を確認してください: {e}")
         except Exception as e:
             print(f"ボットの起動中にエラーが発生しました: {e}")
